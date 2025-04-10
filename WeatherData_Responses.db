@@ -1,0 +1,234 @@
+
+📘 기상청 API 응답 데이터 레퍼런스
+
+----------------------------------------
+🔁 공통 응답 필드
+----------------------------------------
+numOfRows : 한 페이지에 포함된 결과 수
+pageNo : 현재 페이지 번호
+totalCount : 전체 결과 수
+resultCode : 응답 결과 코드 (하단에 별도 설명)
+resultMsg : 응답 결과 메시지 (하단에 별도 설명)
+dataType : 응답 형식 (XML/JSON)
+baseDate : 예보가 발표된 날짜 (YYYYMMDD)
+baseTime : 예보가 발표된 시각 (HHMM)
+fcstDate : 예보 대상 날짜 (YYYYMMDD)
+fcstTime : 예보 대상 시각 (HHMM)
+category : 예보 항목 구분 코드
+fcstValue : 예보 값 (항목에 따라 단위 상이)
+nx / ny : 예보 지점의 격자 좌표
+obsrValue : 실황 관측값 (초단기실황에서 사용됨)
+
+----------------------------------------
+📂 category 코드 목록 + 세부 코드값
+----------------------------------------
+TMP : 1시간 기온 (℃)
+TMN : 일 최저기온 (℃)
+TMX : 일 최고기온 (℃)
+UUU : 동서 바람 성분 (m/s) - 음수: 서풍, 양수: 동풍
+VVV : 남북 바람 성분 (m/s) - 음수: 북풍, 양수: 남풍
+VEC : 풍향 (deg) - 0~360
+WSD : 풍속 (m/s)
+REH : 습도 (%) - 0~100
+POP : 강수확률 (%)
+PTY : 강수 형태 (코드값)
+    - 0: 없음
+    - 1: 비
+    - 2: 비/눈 (진눈깨비)
+    - 3: 눈
+    - 4: 소나기
+    - 5: 빗방울
+    - 6: 빗방울/눈날림
+    - 7: 눈날림
+PCP : 1시간 강수량 (mm 또는 범주형)
+    - 0: 강수 없음
+    - 1mm 미만: 강수없음/1mm 미만
+    - 1.0 이상: 실수(mm)
+SNO : 1시간 신적설 (cm 또는 범주형)
+    - 0 또는 없음: 적설 없음
+    - 1 이상: 적설량(cm)
+    - 5 이상: "5cm 이상"
+SKY : 하늘 상태 (코드값)
+    - 1: 맑음
+    - 3: 구름많음
+    - 4: 흐림
+LGT : 낙뢰 가능성 (kA)
+WAV : 파고 (m)
+
+----------------------------------------
+🌡 초단기실황 category
+----------------------------------------
+T1H : 기온 (℃)
+RN1 : 1시간 강수량 (mm)
+UUU / VVV : 바람 성분 (m/s)
+REH : 습도 (%)
+PTY : 강수형태 (코드값)
+VEC : 풍향 (deg)
+WSD : 풍속 (m/s)
+
+----------------------------------------
+📆 중기예보 공통 필드
+----------------------------------------
+numOfRows / pageNo / totalCount
+resultCode / resultMsg / dataType
+tmFc : 발표시각 (YYYYMMDDHHmm)
+
+----------------------------------------
+📝 중기전망조회 (getMidFcst)
+----------------------------------------
+stnId : 지점번호
+wfSv : 중기 기상전망 전체 설명
+
+----------------------------------------
+🗺 중기육상예보조회 (getMidLandFcst)
+----------------------------------------
+regId : 예보구역코드
+wf3Am ~ wf7Pm : 3~7일 오전/오후 날씨
+wf8, wf9, wf10 : 8~10일 날씨
+
+----------------------------------------
+🌦 날씨값 코드 예시
+----------------------------------------
+맑음, 구름많음, 흐림
+구름많고 비, 흐리고 비, 구름많고 눈, 흐리고 눈, 비/눈, 소나기 등
+
+----------------------------------------
+🌡 중기기온조회 (getMidTa)
+----------------------------------------
+regId : 예보구역코드
+taMin3 ~ taMin10 : 3~10일 최저기온
+taMax3 ~ taMax10 : 3~10일 최고기온
+
+----------------------------------------
+🌊 중기해상예보조회 (getMidSeaFcst)
+----------------------------------------
+regId : 예보구역코드
+wf3Am ~ wf7Pm : 3~7일 오전/오후 날씨
+wf8, wf9, wf10 : 8~10일 날씨
+wh3AAm ~ wh10BPm : 3~10일 예상 파고 (최소/최대, m)
+
+----------------------------------------
+🧾 resultCode / resultMsg 목록
+----------------------------------------
+00  NORMAL_SERVICE                          정상 처리
+01  APPLICATION_ERROR                        애플리케이션 에러
+02  DB_ERROR                                 데이터베이스 오류
+03  NODATA_ERROR                             데이터 없음
+04  HTTP_ERROR                               HTTP 통신 오류
+05  SERVICETIME_OUT                          서비스 연결 실패
+10  INVALID_REQUEST_PARAMETER_ERROR          잘못된 요청 파라미터
+11  NO_MANDATORY_REQUEST_PARAMETERS_ERROR    필수 요청 파라미터 누락
+12  NO_OPENAPI_SERVICE_ERROR                 존재하지 않거나 폐기된 API
+20  SERVICE_ACCESS_DENIED_ERROR              서비스 접근 거부
+21  TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR 일시적 사용 불가 키
+22  LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR 요청 제한 횟수 초과
+30  SERVICE_KEY_IS_NOT_REGISTERED_ERROR      등록되지 않은 키
+31  DEADLINE_HAS_EXPIRED_ERROR               서비스 키 기한 만료
+32  UNREGISTERED_IP_ERROR                    등록되지 않은 IP
+
+
+
+
+============================================================================================
+
+📘 에어코리아 API 응답 데이터 레퍼런스
+
+----------------------------------------
+🔁 공통 응답 필드
+----------------------------------------
+numOfRows : 한 페이지 결과 수
+pageNo : 페이지 번호
+totalCount : 전체 결과 수
+resultCode : 결과 코드 (00은 정상)
+resultMsg : 결과 메시지
+dataType : 응답 형식 (XML / JSON)
+
+----------------------------------------
+✅ 시도별 실시간 대기오염 정보 조회 (getCtprvnRltmMesureDnsty)
+----------------------------------------
+stationName : 측정소명
+sidoName : 시도명
+dataTime : 측정일시
+so2Value : 아황산가스 농도 (ppm)
+coValue : 일산화탄소 농도 (ppm)
+o3Value : 오존 농도 (ppm)
+no2Value : 이산화질소 농도 (ppm)
+pm10Value : 미세먼지(PM10) 농도 (㎍/㎥)
+pm25Value : 초미세먼지(PM2.5) 농도 (㎍/㎥)
+khaiValue : 통합대기환경지수
+so2Grade / coGrade / o3Grade / no2Grade : 항목별 등급 (1~4)
+pm10Grade / pm25Grade / khaiGrade : 미세먼지 및 통합 등급
+so2Flag ~ pm25Flag : 측정자료 상태 (점검, 장애 등)
+
+----------------------------------------
+☁️ 대기질 예보통보 조회 (getMinuDustFrcstDspth)
+----------------------------------------
+dataTime : 통보 시각
+informCode : 통보 항목 (PM10, PM25, O3)
+informData : 예보 날짜
+informGrade : 지역별 등급 (서울: 나쁨 등)
+informCause : 예보 원인
+informOverall : 예보 개요
+actionKnack : 행동 요령 (선택적)
+imageUrl1~6 : 예보 시각별 이미지 URL
+
+----------------------------------------
+⚠️ 고농도 초미세먼지 50초과 예보 (getMinuDustFrcstDspth50Over)
+----------------------------------------
+dataTime : 발표 시각
+informData : 예보일
+seoul50Over / incheon50Over / gyeonggi50Over : 50초과 여부 (O 또는 null)
+
+----------------------------------------
+🚨 미세먼지 경보 발령 조회 (getUlfptcaAlarmInfo)
+----------------------------------------
+sn : 관리번호
+dataDate : 발령일
+districtName : 시/도
+moveName : 권역
+itemCode : 항목 (PM10, PM25)
+issueGbn : 경보 구분 (주의보, 경보)
+issueDate / issueTime : 발령 일시
+issueVal : 발령 농도
+clearDate / clearTime : 해제 일시
+clearVal : 해제 농도
+
+----------------------------------------
+🌪 오존/황사 발생 정보 조회 (getOzAdvsryOccrrncInfo / getYlwsndAdvsryOccrrncInfo)
+----------------------------------------
+dataDate : 발령일자
+districtName : 시도명
+moveName : 권역명
+issueTime / clearTime : 발령/해제 시각
+issueVal / clearVal : 발령/해제 농도
+maxVal : 최고농도
+issueLvl : 발령단계 (오존: 1~3)
+tmCnt : 황사 회차
+tmArea : 황사 발생지역
+
+----------------------------------------
+📅 초미세먼지 주간예보 조회 (getMinuDustWeekFrcstDspth)
+----------------------------------------
+presnatnDt : 발표일
+frcstOneDt ~ frcstFourDt : 예보 일자
+frcstOneCn ~ frcstFourCn : 각 예보 내용
+gwthcnd : 대기질 전망 설명
+
+----------------------------------------
+resultCode / resultMsg 목록
+----------------------------------------
+00  NORMAL_SERVICE                          정상 처리
+01  APPLICATION_ERROR                        애플리케이션 에러
+02  DB_ERROR                                 데이터베이스 오류
+03  NODATA_ERROR                             데이터 없음
+04  HTTP_ERROR                               HTTP 통신 오류
+05  SERVICETIME_OUT                          서비스 연결 실패
+10  INVALID_REQUEST_PARAMETER_ERROR          잘못된 요청 파라미터
+11  NO_MANDATORY_REQUEST_PARAMETERS_ERROR    필수 요청 파라미터 누락
+12  NO_OPENAPI_SERVICE_ERROR                 존재하지 않거나 폐기된 API
+20  SERVICE_ACCESS_DENIED_ERROR              서비스 접근 거부
+21  TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR 일시적 사용 불가 키
+22  LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR 요청 제한 횟수 초과
+30  SERVICE_KEY_IS_NOT_REGISTERED_ERROR      등록되지 않은 키
+31  DEADLINE_HAS_EXPIRED_ERROR               서비스 키 기한 만료
+32  UNREGISTERED_IP_ERROR                    등록되지 않은 IP
