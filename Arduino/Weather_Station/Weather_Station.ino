@@ -2,22 +2,9 @@
 #include <HTTPClient.h>
 #include <NTPClient.h> //NTPClient by Fabrice Weinberg
 #include <WiFiUdp.h>
+#include <WiFiManager.h> // WiFiManager 라이브러리 추가
 //#include <ESPAsyncWebServer.h> //ESPAsyncWebServer by lacamera - 웹서버 구현용
 #include "credentials.h"
-
-// Wi-Fi 설정
-struct WiFiCredentials {
-    const char* ssid;
-    const char* password;
-};
-
-// 여러 개의 와이파이 정보 설정
-const WiFiCredentials wifiNetworks[] = {
-    {ssid_1, password_1},     // 첫 번째 와이파이
-    {ssid_2, password_2}, // 두 번째 와이파이
-    {ssid_3, password_3} // 세 번째 와이파이
-};
-const int numNetworks = sizeof(wifiNetworks) / sizeof(wifiNetworks[0]);
 
 // NTP 설정
 WiFiUDP ntpUDP;
@@ -51,36 +38,16 @@ const char* mid_sea_fcst_url = "http://apis.data.go.kr/1360000/MidFcstInfoServic
 void setup() {
   Serial.begin(115200);
 
-  // 와이파이 연결 시도
-  bool connected = false;
-  Serial.println("Attempting to connect to WiFi...");
-  
-  for (int i = 0; i < numNetworks && !connected; i++) {
-    Serial.printf("\nTrying to connect to %s\n", wifiNetworks[i].ssid);
-    WiFi.begin(wifiNetworks[i].ssid, wifiNetworks[i].password);
-    
-    // 10초 동안 연결 시도
-    int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 20) {
-      delay(500);
-      Serial.print(".");
-      attempts++;
-    }
-    
-    if (WiFi.status() == WL_CONNECTED) {
-      connected = true;
-      Serial.printf("\nConnected to %s successfully!\n", wifiNetworks[i].ssid);
-      Serial.printf("IP address: %s\n", WiFi.localIP().toString().c_str());
-    } else {
-      Serial.printf("\nFailed to connect to %s\n", wifiNetworks[i].ssid);
-      WiFi.disconnect();
-    }
-  }
-  
-  if (!connected) {
-    Serial.println("\nFailed to connect to any WiFi network!");
-    // 여기서 실패 처리를 할 수 있습니다 (예: ESP32 재시작)
-    ESP.restart();
+  // WiFiManager를 사용하여 WiFi 연결
+  WiFiManager wm;
+  bool res = wm.autoConnect("WeatherStation_Setup", "password"); // AP 이름과 비밀번호 설정
+
+  if(!res) {
+      Serial.println("Failed to connect");
+      ESP.restart();
+  } 
+  else {
+      Serial.println("connected...yeey :)");
   }
 
   // 2. NTP 서버에서 시간 가져오기
